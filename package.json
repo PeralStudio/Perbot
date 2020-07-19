@@ -4,13 +4,19 @@
   "description": "PerBot de pruebas",
   "main": "index.js",
   "scripts": {
+    "dev": "nodemon server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "Alberto Peral",
   "license": "ISC",
   "dependencies": {
-    "discord.js": "^12.2.0"
+    "axios": "^0.19.2",
+    "discord.js": "^12.2.0",
+    "figlet": "^1.5.0",
+    "moment": "^2.27.0",
+    "moment-duration-format": "^2.3.2",
+    "youtube-node": "^1.3.3"
   },
   "devDependencies": {
     "nodemon": "^2.0.4"
