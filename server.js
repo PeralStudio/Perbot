@@ -12,9 +12,47 @@ const YouTube = require('youtube-node');
 const prefix = config.prefix;
 const youtubeKey = config.youtubeKey;
 const giphyApi = config.giphyApi;
+const encryptedSummoner = config.encryptedSummoner;
+const lolApi = config.lolApi;
 const versionbot = "PerBot v1.1 Peralstudio.com";
 
 
+
+//LOL STATS SOLO PARA MI CUENTA
+client.on("message", message => {
+  if (message.content === (prefix + 'lol')) {
+
+    fetch(`https://euw1.api.riotgames.com/lol/league/v4/entries/by-summoner/${encryptedSummoner}?api_key=${lolApi}`)
+    .then(response => response.json())
+    .then(data => {
+      
+      const queueType = data[0].queueType
+      const tier = data[0].tier
+      const rank = data[0].rank
+      const summonerName = data[0].summonerName
+      const leaguePoints = data[0].leaguePoints
+      const wins = data[0].wins
+      const losses = data[0].losses
+      
+      
+      const embed = new Discord.MessageEmbed()
+
+      .setAuthor(message.author.username, message.author.displayAvatarURL({size : 1024}))
+      .addField('Cuenta: ',summonerName, true)
+      .addField('Tipo de cola: ',queueType, true)
+      .addField('División: ',tier, true)
+      .addField('Rango: ',rank, true)
+      .addField('League Points: ',leaguePoints, true)
+      .addField('Victorias: ' ,wins, true)
+      .addField('Derrotas: ' ,losses, true)
+      .setTimestamp()
+      .setFooter(versionbot, client.user.displayAvatarURL())
+      
+      message.channel.send(embed)
+    }).catch(err => {
+      message.reply(`Error`) })
+
+  }})
 
 
 // MENSAJE NUEVO MIEMBRO
@@ -25,7 +63,9 @@ client.on("guildMemberAdd", miembro => {
   const fotosBienvenida = [
     "https://static.wixstatic.com/media/e7332b_2b53e87788594ce4845eab5a4cb09631~mv2.gif",
     "https://i.pinimg.com/originals/c2/b7/2c/c2b72cfbbbc93891c51b5c615c10b356.gif",
-    "https://puloduplo.com.br/wp-content/uploads/2020/05/games-riot-games-confetti6.gif"
+    "https://puloduplo.com.br/wp-content/uploads/2020/05/games-riot-games-confetti6.gif",
+    "https://pa1.narvii.com/7134/e55a690bf6acab74324da299e923af2c30cd544br1-500-500_hq.gif",
+    "https://media3.giphy.com/media/j2vvUlEg8XfK5rU5Aw/giphy.gif"
   ]
 
   const saludos = [
@@ -50,6 +90,42 @@ client.on("guildMemberAdd", miembro => {
   canal.send(embed)
     
 
+});
+
+
+//MENSAJE CUANDO ALGUIEN SE VA
+client.on("guildMemberRemove", (miembro) => {
+  var canal = client.channels.cache.find(channel => channel.id === ("732183405348913203"));
+  
+      const fotosBienvenida = [
+        //"https://static.wixstatic.com/media/e7332b_2b53e87788594ce4845eab5a4cb09631~mv2.gif",
+        //"https://i.pinimg.com/originals/c2/b7/2c/c2b72cfbbbc93891c51b5c615c10b356.gif",
+        //"https://puloduplo.com.br/wp-content/uploads/2020/05/games-riot-games-confetti6.gif",
+        //"https://pa1.narvii.com/7134/e55a690bf6acab74324da299e923af2c30cd544br1-500-500_hq.gif",
+        "https://media1.tenor.com/images/59af6d17fa7477ae2379697aa8df134c/tenor.gif?itemid=8025380"
+      ]
+
+      const saludos = [
+        "¡Se fué!",
+        "Nos dejo",
+        "Chao chao",
+        "A pastar, se fué"
+      ]
+        
+      var saludo = saludos[Math.floor(saludos.length * Math.random())];
+      var fotoBienvenida = fotosBienvenida[Math.floor(fotosBienvenida.length * Math.random())];
+      
+      const embed = new Discord.MessageEmbed()
+      .setThumbnail(miembro.user.displayAvatarURL({size : 1024}))
+      .setColor("RANDOM")
+      .setImage(fotoBienvenida)
+      .addField(`:wave: ${saludo} \n` , ` <@${miembro.id}> \n`) //` ${client.channels.cache.get('734258456034279456')} `)
+      .addField('¡Adios!' , ` ${client.channels.cache.get('732183405348913203')} `)
+      .setTimestamp()
+      .setFooter(versionbot, client.user.displayAvatarURL())
+      
+      canal.send(embed)
+ 
 });
 
 
@@ -197,16 +273,26 @@ client.on("message", message => {
 
 // CALCULA EL PING DEL MENSAJE
 client.on("message", message => {
-  let ping = Math.floor(message.client.ping);
   if(message.content === (prefix + "ping")){
-    message.channel.send("Cargando...").then(m => {
-      m.edit({embed: {
-        title: ":regional_indicator_p: :regional_indicator_i: :regional_indicator_n: :regional_indicator_g:",
-        description: `  Tu ping es: **${Math.floor(
-          m.createdTimestamp - Date.now()
-        )}ms**`
-        }});
-    });}
+    message.channel.send("Calculando ping...").then(m => {
+      const ping = m.createdTimestamp - message.createdTimestamp;
+      const botPing = Math.round(client.ws.ping);
+      
+      m.delete()
+
+      const embed = new Discord.MessageEmbed()
+      .setAuthor(message.author.username, message.author.displayAvatarURL())
+      .setTitle(":regional_indicator_p: :regional_indicator_i: :regional_indicator_n: :regional_indicator_g:")
+      .addField(`Ping PerBot: `, ` **${ping}**`, true)
+      .addField(`Ping API: `,` **${botPing}**`, true)
+      .setColor("RANDOM")
+      .setTimestamp()
+      .setFooter(versionbot, client.user.displayAvatarURL())
+      
+    return message.channel.send(embed)
+
+    });    
+  }
 });
 
 
@@ -683,6 +769,78 @@ client.on("message", message => {
 })
 
 
+//COMANDO LOVE ENTRE DOS MENCIONES 
+client.on("message", message => {
+  if (!message.content.startsWith(prefix + 'amor') || message.author.bot) return;
+let users = message.mentions.users.map(m => m.username).join(' y ');
+if(!users) return message.channel.send('**Por favor mencione a dos usuarios para calcular.**');// es por si pusiste solamente el comando
+    
+const random = Math.floor(Math.random() * 100);// math.random para hacerlo random
+let heard = "";
+ 
+    if(random < 50){
+        heard=':broken_heart:';
+
+    }else if(random < 80){
+        heard=':sparkling_heart: ';
+        
+    }else if(random < 101){
+        heard=':heart:';
+
+    }
+let Corazon = "";
+            if(random < 50){
+           Corazon='https://www.gifsanimados.org/data/media/503/corazon-roto-imagen-animada-0016.gif';
+
+          }else if(random < 80){
+            Corazon='https://thumbs.gfycat.com/UnpleasantAcclaimedAmbushbug-max-1mb.gif';
+
+            }else if(random < 101){
+                Corazon='https://i.pinimg.com/originals/e6/61/56/e661567496eb971ef140351349fd4399.gif';
+
+
+            }
+const embed = new Discord.MessageEmbed()
+    .setAuthor('El porcentaje de amor de '+users+' es:')//los usuarios que elejiste estan en '+users+'
+    .setDescription('**'+random+' %**'+' '+heard)//aqui hace el math random
+    .setImage(Corazon)
+    .setColor("RANDOM")//puedon ponerle el que ustedes quieran
+    .setTimestamp()
+    .setFooter(versionbot, client.user.displayAvatarURL())
+
+message.channel.send(embed);
+  
+ });
+
+
+//CREAR UN EMBED 
+client.on("message", message => {
+  if (!message.content.startsWith(prefix + 'embed') || message.author.bot) return;
+  if(message.member.roles.cache.find(rol => rol.id === "726768057149816932")){
+    const args = message.content.slice(prefix.length).split(' ');
+    const command = args.shift().toLowerCase();
+    message.delete();
+ 
+ console.log(args)
+ const cmd = args.join(' ').split(' , ') //La constante indica que debemos ingresar los argumentos separados de un |, ejemplo: TEXTO | color hex | TEXTO
+
+  let embed = new Discord.MessageEmbed() 
+  .setTitle(cmd[0])
+  .setDescription(cmd[1])
+  .setImage(cmd[2])
+  .setColor("RANDOM")
+  .setTimestamp()
+
+  message.channel.send(embed)
+
+  }
+  else {
+    message.delete()
+    message.channel.send(`Achanta <@${message.author.id}> !! No tienes premisos`).then(el => setTimeout(() => el.delete(), 2000));
+    
+  }});
+
+
 // COMANDO HELP CON TODOS LOS COMANDOS
 client.on("message", message => {
   if(message.content.startsWith(prefix + 'help')){
@@ -696,11 +854,13 @@ client.on("message", message => {
     .addField(prefix + 'borrar[nº mensajes]', 'Borrar mensajes + [Cantidad].', true)
     .addField(prefix + 'y+[loquequierasbuscar]', 'Buscar en Youtube.', true)
     .addField(prefix + 'gif', 'Generar gif random.', true)
+    .addField(prefix + 'chiste', 'Chiste aleatorio.', true)
     .addField(prefix + 'follar <@user>', 'Follate a alguien XXX.', true)
     .addField(prefix + 'tiempo <ciudad>', 'Información del tiempo.', true)
     .addField(prefix + 'geometry <texto>', 'Texto tipo Geometry dash.', true)
     .addField(prefix + 'ppt', 'Piedra Papel Tijeras.', true)
     .addField(prefix + 'bola8 <pregunta>', 'Pregunta a la Bola8.', true)
+    .addField(prefix + 'amor', 'Calcula el % de amor de dos usuarios.', true)
     .addField(prefix + 'minas', 'Buscaminas.', true)
     .addField(prefix + 'asci <texto>', 'Texto en ASCII.', true)
     .addField(prefix + 'danie', 'Foto Cararodapiés.', true)
@@ -708,6 +868,7 @@ client.on("message", message => {
     .addField(prefix + 'arder', 'Ardiendo en pasión.', true)
     .addField(prefix + 'serverinfo', 'Información del servidor.', true)
     .addField(prefix + 'corona <país>', 'Información sobre el Coronavirus.', true)
+    .addField(prefix + 'embed', 'Crear un embed', true)
     .addField(prefix + 'botinfo', 'Información del BOT.', true)
     .setURL("https://github.com/Peralstudio")
     .setTimestamp()
@@ -717,7 +878,7 @@ client.on("message", message => {
 message.channel.send('**COMANDOS DE PERBOT**', embed);
   }});
 
-  
+
 /* Para que funcione correctamente se debe instalar el npm llamado weez
 En consola poner:
    Glitch: pnpm i weez
@@ -755,4 +916,4 @@ client.on('guildMemberAdd', (member) => { // guildMemberAdd es cuando se une el 
 
 });*/
  
-client.login(config.token, config.youtubeKey, config.giphyApi);
+client.login(config.token, config.youtubeKey, config.giphyApi, config.encryptedSummoner, config.lolApi);
