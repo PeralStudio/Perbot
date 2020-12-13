@@ -19,6 +19,96 @@ const versionbot = "PerBot v1.1 Peralstudio.com";
 
 
 
+
+//ESTADO PERSONALIZADO PARA MI
+const state = [
+  //'En partida Competitiva',
+  //'Achantado',
+  //'Te lo puedo mirar',
+  'React',
+  'Javascript',
+  'Node.js'
+];
+
+const detail = [
+  //'KILLER INSTINCT',
+  //'PRINCE OF PERSIA',
+  //'ARKANOID',
+  'Programando cosas'
+];
+ 
+const partySize = [
+  1,
+  2,
+  3,
+  4,
+  5
+]
+
+const partyMax = [
+  1,
+  2,
+  3,
+  4,
+  5
+]
+
+const largeImageKeys = [
+  //"large",
+  "large1",
+  "large2",
+  "large3",
+  "large4",
+  //"large5",
+  "large6",
+  "large7",
+  //"small3",
+  //"small4",
+  //'large8',
+  //'large9',
+  //'large10'
+]
+
+const smallImageKeys = [
+  //"small",
+  //"small1",
+  //"small2"
+  //"small3",
+  "small4",
+  //'large8',
+  'small1',
+  'small2',
+  'small3'
+]
+
+setInterval(() => {
+  const states = state[Math.floor(state.length * Math.random())];
+  const details = detail[Math.floor(detail.length * Math.random())];
+  const partySizes = partySize[Math.floor(partySize.length * Math.random())];
+  const partyMaxs = partyMax[Math.floor(partyMax.length * Math.random())];
+  const largeImage = largeImageKeys[Math.floor(largeImageKeys.length * Math.random())];
+  const smallImage = smallImageKeys[Math.floor(smallImageKeys.length * Math.random())];
+
+  client2.updatePresence({
+
+    details: details,
+    state: states,
+    partySize: partySizes,
+    partyMax: partyMaxs,
+    largeImageKey: largeImage,
+    smallImageKey: smallImage,
+    largeImageText: ("Programando cosas frescas"),
+    smallImageText: ("Achant!"),
+    partyId: ("ae488379-351d-4a4f-ad32-2b9b01c91657"),
+    spectateSecret: ("MTIzNDV8MTIzNDV8MTMyNDU0"),
+    joinSecret: ("MTI4NzM0OjFpMmhuZToxMjMxMjM"),
+    startTimestamp: 1507665886,
+    instance: true,
+  })
+}, 3000);
+
+
+
 //LOL STATS SOLO PARA MI CUENTA
 client.on("message", message => {
   if (message.content === (prefix + 'lol')) {
