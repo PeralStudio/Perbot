@@ -4,6 +4,7 @@ const config = require("./config.json");
 const fetch = require('node-fetch');
 const moment = require('moment');
 require('moment-duration-format');
+require("moment/min/locales.min");
 const axios = require('axios');
 const figlet = require('figlet');
 const YouTube = require('youtube-node');
@@ -131,21 +132,27 @@ client.on("guildMemberRemove", (miembro) => {
 
 //STATUS DEL BOT / ACTIVIDAD
 client.on("ready", () => {
-  setInterval(() => {
+  /* setInterval(() => { */
   console.log("Estoy listo!!");
   
-  const total = client.users.cache.size;   
+  /* const total = client.users.cache.size;   
   const membersOnline =  client.users.cache.filter(m=> m.presence.status === 'online').size
   const memberAusente = client.users.cache.filter(m=> m.presence.status === 'idle').size
   const memberDnd = client.users.cache.filter(m=> m.presence.status === 'dnd').size
   const memberOfline = client.users.cache.filter(m=> m.presence.status === 'offline').size
+
+
+  console.log(memberDnd, memberAusente, membersOnline, memberOfline)
+
+  const totalConectados = memberDnd + memberAusente + membersOnline */
       
-  var name =  `: (${total.toString()}   Total) + (` +
-              `${membersOnline.toString()}  Online) + ` +
+  var name =  "la gameboy"/* `: (${total.toString()}   Total) + (` +
+              `${totalConectados.toString()}  Conectados) + ` +
+              `(${membersOnline.toString()}  Online) + ` +
               `(${memberAusente.toString()}  Ausente) + `+
               `(${memberDnd.toString()} Ocupado) + `+
-              `(${memberOfline.toString()}  Desconectado) `
-  var type = "WATCHING";
+              `(${memberOfline.toString()}  Desconectado) ` */
+  var type = "PLAYING";
   var url = "https://www.peralstudio.com";
   client.user.setPresence({
     status: 'online',
@@ -155,7 +162,7 @@ client.on("ready", () => {
         url
     }
              
-  })}, 3000 );
+  })/* }, 3000 ) */;
 });
 
 /*
@@ -334,15 +341,18 @@ client.on("message", message => {
     let userm = message.mentions.users.first()
     if(!userm){
       var user = message.author;
+      moment.locale("es");
+      var creada = moment(user.createdAt).format('l, h:mm');
+      var ingreso = moment(message.member.joinedAt).format('l, h:mm');
+      var hace = moment(user.createdAt).fromNow();
       
         const embed = new Discord.MessageEmbed()
         .setThumbnail(user.displayAvatarURL({size : 1024}))
         .setAuthor(user.username+'#'+user.discriminator, user.displayAvatarURL({size : 1024}))
         .addField('Jugando a', user.presence.activities[0] != null ? user.presence.activities[0].name : "Nada", true)
         .addField('Estado', user.presence.status, true)
-        .addField('Cuenta Creada', user.createdAt.toDateString(), true)
-        .addField('Fecha de Ingreso', message.member.joinedAt.toDateString())
-        .setColor("RANDOM")
+        .addField('Cuenta Creada',` ${creada} \n ${hace}`, true)
+        .addField('Fecha de Ingreso', ingreso, true).setColor("RANDOM")
         .setTimestamp()
         .setFooter(versionbot, client.user.displayAvatarURL())
         
@@ -379,6 +389,7 @@ client.on('message', message => {
       let recovered = data.recovered.value.toLocaleString()
       let deaths = data.deaths.value.toLocaleString()
       const d = data.lastUpdate
+      moment.locale("es")
       const date = moment(d).format("L");
 
       const embed = new Discord.MessageEmbed()
