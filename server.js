@@ -328,7 +328,7 @@ client.on("message", message => {
     const embed = new Discord.MessageEmbed()
       .setAuthor(message.author.username, message.author.displayAvatarURL())
       .setColor("RANDOM")
-      .setImage('https://scontent-mad1-1.xx.fbcdn.net/v/t31.0-8/919033_634933919854268_393541899_o.jpg?_nc_cat=101&_nc_sid=730e14&_nc_ohc=_BfE3es4ETkAX_CTpec&_nc_ht=scontent-mad1-1.xx&oh=3286291f2c68f4d394c5efb28a9fcccc&oe=5F1A458E')
+      .setImage('https://scontent-mad1-1.xx.fbcdn.net/v/t1.0-9/270059_2231376747238_3645174_n.jpg?_nc_cat=101&ccb=2&_nc_sid=cdbe9c&_nc_ohc=u0PlTVzU0l8AX9Zjj-X&_nc_ht=scontent-mad1-1.xx&oh=2308b697170b7d39c7b06cee4a47ea13&oe=600F0812')
       .setTimestamp()
       .setFooter(versionbot, client.user.displayAvatarURL())
       
@@ -343,7 +343,7 @@ client.on("message", message => {
     const embed = new Discord.MessageEmbed()
       .setAuthor(message.author.username, message.author.displayAvatarURL())
       .setColor("RANDOM")
-      .setImage('https://scontent-mad1-1.xx.fbcdn.net/v/t1.0-9/23961_4315216091648_2050903303_n.jpg?_nc_cat=107&_nc_sid=cdbe9c&_nc_ohc=ZVCD6v3366gAX9JFiGd&_nc_ht=scontent-mad1-1.xx&oh=f0515fd0b813def74e1b000848600573&oe=5F2D36E0')
+      .setImage('https://scontent-mad1-1.xx.fbcdn.net/v/t1.0-9/15977566_10212200149947108_6005180676926954275_n.jpg?_nc_cat=102&ccb=2&_nc_sid=a4a2d7&_nc_ohc=AV_n1EQadU8AX_0cBuK&_nc_ht=scontent-mad1-1.xx&oh=d83a01d19e01f438a63d298ad1a04865&oe=60113F16')
       .setTimestamp()
       .setFooter(versionbot, client.user.displayAvatarURL())
       
